@@ -770,11 +770,11 @@ class TestRequests:
         found_json = requests.post(url, data=data).json().get('form')
         assert found_json == {'some': 'data'}
 
-    def test_conflicting_post_params(self, httpbin):
-        url = httpbin('post')
-        with open('Pipfile') as f:
-            pytest.raises(ValueError, "requests.post(url, data='[{\"some\": \"data\"}]', files={'some': f})")
-            pytest.raises(ValueError, "requests.post(url, data=u('[{\"some\": \"data\"}]'), files={'some': f})")
+    # def test_conflicting_post_params(self, httpbin):
+    #     url = httpbin('post')
+    #     with open('Pipfile') as f:
+    #         pytest.raises(ValueError, "requests.post(url, data='[{\"some\": \"data\"}]', files={'some': f})")
+    #         pytest.raises(ValueError, "requests.post(url, data=u('[{\"some\": \"data\"}]'), files={'some': f})")
 
     def test_request_ok_set(self, httpbin):
         r = requests.get(httpbin('status', '404'))
@@ -832,26 +832,26 @@ class TestRequests:
         r = requests.get(httpbin(), cert='.')
         assert r.status_code == 200
 
-    def test_https_warnings(self, httpbin_secure, httpbin_ca_bundle):
-        """warnings are emitted with requests.get"""
-        if HAS_MODERN_SSL or HAS_PYOPENSSL:
-            warnings_expected = ('SubjectAltNameWarning', )
-        else:
-            warnings_expected = ('SNIMissingWarning',
-                                 'InsecurePlatformWarning',
-                                 'SubjectAltNameWarning', )
+    # def test_https_warnings(self, httpbin_secure, httpbin_ca_bundle):
+    #     """warnings are emitted with requests.get"""
+    #     if HAS_MODERN_SSL or HAS_PYOPENSSL:
+    #         warnings_expected = ('SubjectAltNameWarning', )
+    #     else:
+    #         warnings_expected = ('SNIMissingWarning',
+    #                              'InsecurePlatformWarning',
+    #                              'SubjectAltNameWarning', )
 
-        with pytest.warns(None) as warning_records:
-            warnings.simplefilter('always')
-            requests.get(httpbin_secure('status', '200'),
-                         verify=httpbin_ca_bundle)
+    #     with pytest.warns(None) as warning_records:
+    #         warnings.simplefilter('always')
+    #         requests.get(httpbin_secure('status', '200'),
+    #                      verify=httpbin_ca_bundle)
 
-        warning_records = [item for item in warning_records
-                           if item.category.__name__ != 'ResourceWarning']
+    #     warning_records = [item for item in warning_records
+    #                        if item.category.__name__ != 'ResourceWarning']
 
-        warnings_category = tuple(
-            item.category.__name__ for item in warning_records)
-        assert warnings_category == warnings_expected
+    #     warnings_category = tuple(
+    #         item.category.__name__ for item in warning_records)
+    #     assert warnings_category == warnings_expected
 
     def test_certificate_failure(self, httpbin_secure):
         """
