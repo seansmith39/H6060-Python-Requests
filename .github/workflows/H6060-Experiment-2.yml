@@ -79,10 +79,11 @@ jobs:
       - name: Checkout GitHub Repository
         uses: actions/checkout@v4
 
-      - name: Install Python 3.6
-        uses: actions/setup-python@v2.1.1
+      - name: Install python version
+        uses: gabrielfalcao/pyenv-action@v18
         with:
-          python-version: 3.6
+          default: 3.6
+          command: pip install -U pip
 
       - name: Install Pip Dependencies
         uses: seansmith39/H6060-Experiment-Resources/.github/actions/python/install-pip-dependencies@main
@@ -99,7 +100,9 @@ jobs:
           build-directory: dist
 
       - name: Run Tests (Make)
-        run: make coverage
+        run: |
+          make init
+          make coverage
 
       - name: Upload Coverage XML Report
         uses: actions/upload-artifact@v4
@@ -107,3 +110,24 @@ jobs:
           name: coverage-report
           path: coverage.xml
           if-no-files-found: error
+
+  python-scanning:
+    name: Run SCA and SAST Python Scanning Workflow
+    uses: seansmith39/H6060-Experiment-Resources/.github/workflows/experiment-1-python.yml@main
+    needs: build-application
+    secrets: inherit
+    with:
+      sca-eclipse-steady-enabled: ${{ inputs.sca-eclipse-steady-enabled }}
+      sca-snyk-enabled: ${{ inputs.sca-snyk-enabled }}
+      sca-owasp-dependency-check-enabled: ${{ inputs.sca-owasp-dependency-check-enabled }}
+      sca-grype-enabled: ${{ inputs.sca-grype-enabled }}
+      sast-codeql-enabled: ${{ inputs.sast-codeql-enabled }}
+      sast-sonarqube-enabled: ${{ inputs.sast-sonarqube-enabled }}
+      sast-semgrep-enabled: ${{ inputs.sast-semgrep-enabled }}
+      sast-deepsource-enabled: ${{ inputs.sast-deepsource-enabled }}
+      sast-horusec-enabled: ${{ inputs.sast-horusec-enabled }}
+      sast-snyk-code-enabled: ${{ inputs.sast-snyk-code-enabled }}
+      project-name: H6060-Python-requests
+      sca-file-to-scan: requirements.txt
+      eclipse-steady-workspace-token: 78106DF324E42C8835A0F2FB23BCEE35
+      eclipse-steady-project-source-directories: requests

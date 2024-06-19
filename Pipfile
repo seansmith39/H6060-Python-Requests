@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-pytest = ">=2.8.0"
+pytest = "<=6.2.5"
 codecov = "*"
 pytest-httpbin = ">=0.0.7"
 pytest-mock = "*"

@@ -1,0 +1,10 @@
+certifi==2023.11.17
+chardet==5.2.0
+cryptography==42.0.5
+idna==3.7
+Pygments==2.18.0
+pyOpenSSL==24.1.0
+pytest==6.2.5
+setuptools==68.0.0
+simplejson==3.19.2
+urllib3==2.2.2
