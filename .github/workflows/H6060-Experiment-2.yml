@@ -100,11 +100,13 @@ jobs:
           build-directory: dist
 
       - name: Run Tests (Make)
+        if: ${{ inputs.sast-deepsource-enabled == true }}
         run: |
           make init
           make coverage
 
       - name: Upload Coverage XML Report
+        if: ${{ inputs.sast-deepsource-enabled == true }}
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
