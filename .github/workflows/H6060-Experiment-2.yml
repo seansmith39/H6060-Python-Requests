@@ -139,3 +139,4 @@ jobs:
       sca-file-to-scan: requirements.txt
       eclipse-steady-workspace-token: 78106DF324E42C8835A0F2FB23BCEE35
       eclipse-steady-project-source-directories: requests
+      build-directory: dist
